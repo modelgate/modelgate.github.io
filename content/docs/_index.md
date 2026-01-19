@@ -1,18 +1,8 @@
 ---
-title: Documentation
-next: first-page
+title: 文档
+weight: 1
 ---
 
-This is a demo of the theme's documentation layout.
+# ModelGate 文档
 
-## Hello, World!
-
-```go {filename="main.go"}
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, World!")
-}
-```
+欢迎来到 ModelGate 文档！这里包含了项目介绍、快速开始、API 文档等内容。

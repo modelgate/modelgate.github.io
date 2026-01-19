@@ -1,5 +1,6 @@
 # Hugo configuration file
 title: ModelGate
+description: 企业级大模型 API 网关和管理服务
 
 # import hextra as module
 module:
@@ -18,24 +19,21 @@ markup:
 
 menu:
   main:
-    - name: Docs
+    - name: 文档
       pageRef: /docs
       weight: 1
-    - name: About
+    - name: 关于
       pageRef: /about
       weight: 2
-    - name: Contact ↗
-      url: "https://github.com/imfing"
+    - name: GitHub
       weight: 3
-    - name: Search
+      url: "https://github.com/modelgate/modelgate"
+      params:
+        icon: github
+    - name: 搜索
       weight: 4
       params:
         type: search
-    - name: GitHub
-      weight: 5
-      url: "https://github.com/modelgate/modelgage"
-      params:
-        icon: github
 
 params:
   navbar:
@@ -43,9 +41,14 @@ params:
     displayLogo: false
 
   footer:
-    displayCopyright: false
+    displayCopyright: true
     displayPoweredBy: true
 
   editURL:
-    enable: false
+    enable: true
     base: "https://github.com/modelgate/modelgate.github.io/edit/main/content"
+
+  theme:
+    # light | dark | system
+    default: system
+    displayToggle: true
