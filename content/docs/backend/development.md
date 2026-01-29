@@ -75,14 +75,20 @@ gowatch
 ### 手动运行
 
 ```bash
-# 运行所有服务
-go run cmd/main.go all
-
-# 只运行 API 服务
+# 仅启动 API 转发服务 (端口 8888)
 go run cmd/main.go api
 
-# 只运行管理后台
+# 仅启动管理后台服务 (端口 8889)
 go run cmd/main.go admin
+
+# 同时启动两个服务
+go run cmd/main.go all
+
+# 数据库迁移
+go run cmd/main.go migrate
+
+# 查看帮助
+go run cmd/main.go --help
 ```
 
 ## 项目结构说明

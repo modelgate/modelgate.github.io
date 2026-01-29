@@ -49,42 +49,34 @@ ModelGate 后端采用清晰的分层架构设计，使用 Go 语言开发。
 ```
 modelgate/
 ├── cmd/                    # 命令行入口
-│   └── main.go            # 主程序入口
 ├── configs/               # 配置文件目录
 │   ├── config.toml        # 主配置文件
-│   ├── .env.example       # 环境变量模板
-│   └── rbac_model.conf    # RBAC 权限模型
+│   └── .env               # 环境变量文件
 ├── deployments/           # 部署相关
-│   └── docker-compose.yaml
 ├── docs/                  # 文档
 ├── internal/              # 内部代码
 │   ├── app/              # 应用层 (HTTP/RPC 处理器)
 │   │   ├── admin/        # 管理后台服务
-│   │   │   ├── handler/  # HTTP 处理器
-│   │   │   └── router/   # 路由配置
 │   │   └── api/          # API 转发服务
-│   │       ├── handler/  # HTTP 处理器
-│   │       └── router/   # 路由配置
 │   ├── config/           # 配置管理
-│   ├── module/           # 业务模块
-│   │   ├── relay/        # 模型转发模块
-│   │   │   ├── dao/      # 数据访问层
-│   │   │   ├── model/    # 数据模型
-│   │   │   ├── service/  # 业务逻辑层
-│   │   │   └── runtime/  # 运行时 (转发执行引擎)
-│   │   └── system/       # 系统模块
-│   │       ├── user/     # 用户模块
-│   │       ├── role/     # 角色模块
-│   │       └── menu/     # 菜单模块
-│   ├── pkg/              # 工具包
-│   │   ├── db/           # 数据库工具
-│   │   ├── relay/        # 转发接口定义
-│   │   ├── rbac/         # 权限控制
-│   │   └── utils/        # 通用工具
+│   ├── relay/            # 业务模块
+│   │   ├── dao/          # 数据访问层
+│   │   ├── model/        # 数据模型
+│   │   └── service/      # 业务逻辑层
+│   ├── runtime/          # 运行时 (转发执行引擎)
+│   │   ├── core/         # 核心转发逻辑
+│   │   ├── hooks/        # 转发钩子
+│   │   └── provider/     # 供应商适配器
+│   │       ├── openai/
+│   │       ├── anthropic/
+│   │       └── zhipu/
+│   ├── server/           # 服务器 (路由、中间件)
+│   │   └── middleware/   # 中间件
+│   └── system/           # 系统模块 (用户、角色、菜单)
+├── pkg/                  # 公共包
+│   ├── db/               # 数据库工具
 │   ├── proto/            # Protobuf 生成代码
-│   └── server/           # 服务器
-│       ├── middleware/   # 中间件
-│       └── interceptor/  # RPC 拦截器
+│   └── utils/            # 通用工具
 ├── proto/                # Protobuf 定义
 ├── go.mod
 ├── go.sum
@@ -101,39 +93,34 @@ Relay 模块是 ModelGate 的核心，负责处理大模型 API 转发。
 **结构**：
 
 ```
-internal/module/relay/
+internal/relay/
 ├── dao/           # 数据访问层
-│   ├── provider_dao.go
-│   ├── model_dao.go
-│   ├── request_dao.go
-│   └── account_dao.go
 ├── model/         # 数据模型
-│   ├── provider.go
-│   ├── model.go
-│   ├── request.go
-│   └── account.go
-├── service/       # 业务逻辑层
-│   ├── provider_service.go
-│   ├── model_service.go
-│   └── account_service.go
-└── runtime/       # 转发执行引擎
-    ├── openai.go
-    ├── anthropic.go
-    ├── deepseek.go
-    ├── zhipu.go
-    └── ollama.go
+└── service/       # 业务逻辑层
 ```
 
-**工作流程**：
+### 2. Runtime 模块
 
-1. 接收客户端请求
-2. 验证 API 密钥
-3. 根据模型名称获取供应商配置
-4. 通过 runtime 转发到对应供应商
-5. 记录请求日志和计费信息
-6. 返回结果给客户端
+Runtime 模块是转发的核心引擎，负责实际的请求转发和响应处理。
 
-### 2. System 模块
+**结构**：
+
+```
+internal/runtime/
+├── core/         # 核心转发逻辑
+├── hooks/        # 转发钩子，用于扩展功能
+└── provider/     # 供应商适配器
+    ├── openai/
+    ├── anthropic/
+    └── zhipu/
+```
+
+**支持的提供商**：
+- OpenAI
+- Anthropic
+- 智谱 (Zhipu AI)
+
+### 3. System 模块
 
 System 模块提供基础系统功能。
 

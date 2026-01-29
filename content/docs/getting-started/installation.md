@@ -13,6 +13,7 @@ weight: 2
 
 - Go 1.25.5+
 - MySQL / PostgreSQL / SQLite
+- Redis
 - (可选) Docker 和 Docker Compose
 
 ### 前端界面
@@ -60,17 +61,13 @@ cp configs/.env.example configs/.env
 编辑 `configs/.env` 文件，配置必要的环境变量：
 
 ```env
-# 数据库配置
-MG_DATABASE_DSN=your_database_dsn
 MG_DATABASE_TYPE=mysql
-
-# JWT 密钥 (请修改为随机字符串)
+MG_DATABASE_HOST=you_db_host
+MG_DATABASE_PORT=3306
+MG_DATABASE_USER=your_db_user
 MG_JWT_SECRET=your_jwt_secret
-
-# OpenAI API 密钥 (可选，用于测试)
-MG_OPENAI_API_KEY=your_openai_api_key
-
-# 其他供应商密钥...
+MG_REDIS_HOST=localhost:6379
+# ... 其他配置
 ```
 
 ### 6. 数据库迁移
@@ -123,7 +120,7 @@ pnpm dev
 
 访问 `http://localhost:5173` 即可看到管理界面。
 
-## 使用 Docker 部署
+## Docker 部署
 
 ### Docker Compose (推荐)
 

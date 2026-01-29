@@ -20,7 +20,7 @@ toc: false
 
 ## 核心功能
 
-- **多模型支持** - 支持 OpenAI、Anthropic、DeepSeek、智谱、Ollama 等多个大模型提供商
+- **多模型支持** - 支持 OpenAI、Anthropic、智谱等多个大模型提供商
 - **接口转发** - 提供统一的 API 接口，智能转发到不同的大模型服务
 - **用户管理** - 完整的用户注册、登录、认证授权系统
 - **API 密钥管理** - 用户 API 密钥的创建、管理和权限控制
@@ -28,8 +28,9 @@ toc: false
 - **模型管理** - 管理不同供应商的 AI 模型配置和定价
 - **计费系统** - 基于 Token 使用量的计费和账户流水管理
 - **请求记录** - 完整的 API 请求历史记录和查询
-- **RBAC 权限** - 基于 Casbin 的角色权限控制
+- **速率限制** - 内置请求速率限制功能
 - **流式响应** - 支持流式和非流式响应模式
+- **Redis 缓存** - 支持 Redis 缓存提升性能
 
 ## 项目结构
 
@@ -46,10 +47,12 @@ ModelGate 由三个子项目组成：
 - **语言**: Go 1.25.5
 - **Web 框架**: Gin (REST API) + Connect RPC (gRPC-Web)
 - **数据库 ORM**: GORM
-- **认证授权**: JWT + Casbin
+- **认证授权**: JWT
 - **依赖注入**: samber/do
 - **配置管理**: Viper
 - **日志**: Logrus
+- **缓存**: Redis
+- **命令行**: Cobra
 - **协议**: Protocol Buffers
 
 ### 前端 (modelgate-web)
@@ -73,6 +76,9 @@ cd modelgate
 
 # 安装依赖
 go mod download
+
+# 安装 buf (用于 Protobuf 代码生成)
+go install github.com/bufbuild/buf/cmd/buf@latest
 
 # 生成 Protobuf 代码
 buf generate

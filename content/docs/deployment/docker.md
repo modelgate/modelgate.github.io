@@ -59,6 +59,10 @@ cp configs/.env.example configs/.env
 MG_DATABASE_TYPE=mysql
 MG_DATABASE_DSN=modelgate:password@tcp(mysql:3306)/modelgate?charset=utf8mb4&parseTime=True&loc=Local
 
+# Redis 配置
+MG_REDIS_HOST=redis:6379
+MG_REDIS_DB=0
+
 # JWT 密钥（请修改为随机字符串）
 MG_JWT_SECRET=your-random-secret-key-at-least-32-characters
 
@@ -92,6 +96,18 @@ services:
     networks:
       - modelgate-network
 
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: modelgate-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - modelgate-network
+
   # ModelGate 后端
   backend:
     build:
@@ -106,6 +122,7 @@ services:
       - configs/.env
     depends_on:
       - mysql
+      - redis
     volumes:
       - ./configs:/app/configs
       - ./logs:/app/logs
@@ -145,6 +162,7 @@ services:
 
 volumes:
   mysql_data:
+  redis_data:
 
 networks:
   modelgate-network:

@@ -78,9 +78,7 @@ ModelGate 采用前后端分离架构：
 |--------|------|------------|
 | OpenAI | ✅ | GPT-4, GPT-3.5, etc. |
 | Anthropic | ✅ | Claude 3, etc. |
-| DeepSeek | ✅ | deepseek-chat, deepseek-coder |
 | 智谱 AI | ✅ | GLM-4, etc. |
-| Ollama | ✅ | 本地部署模型 |
 
 ## 核心概念
 

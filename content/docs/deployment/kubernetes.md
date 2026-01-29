@@ -64,15 +64,26 @@ metadata:
   namespace: modelgate
 data:
   config.toml: |
+    [apiServer]
+    name = "api"
+    port = 8888
+
+    [adminServer]
+    name = "admin"
+    port = 8889
+
     [server]
-    api_port = 8888
-    admin_port = 8889
     mode = "release"
 
     [database]
     type = "mysql"
     max_idle_conns = 10
     max_open_conns = 100
+
+    [redis]
+    host = "redis-service"
+    port = 6379
+    db = 0
 
     [log]
     level = "info"
@@ -83,6 +94,11 @@ data:
     enable = true
     allow_origins = ["*"]
     allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+
+    [rateLimit]
+    enable = true
+    requests_per_minute = 60
+    ip_requests_per_minute = 120
 ```
 
 ```bash
@@ -182,7 +198,57 @@ spec:
 kubectl apply -f mysql-deployment.yaml
 ```
 
-### 5. 部署后端服务
+### 5. 部署 Redis
+
+```yaml
+# redis-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: modelgate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: modelgate
+spec:
+  selector:
+    app: redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+```
+
+```bash
+kubectl apply -f redis-deployment.yaml
+```
+
+### 6. 部署后端服务
 
 ```yaml
 # backend-deployment.yaml

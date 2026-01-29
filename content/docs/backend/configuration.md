@@ -24,13 +24,27 @@ configs/
 ### 服务器配置
 
 ```toml
-[server]
+[apiServer]
+# API 转发服务名称
+name = "api"
+
+# 监听地址（留空表示监听所有接口）
+host = ""
+
 # API 转发服务端口
-api_port = 8888
+port = 8888
+
+[adminServer]
+# 管理后台服务名称
+name = "admin"
+
+# 监听地址（留空表示监听所有接口）
+host = ""
 
 # 管理后台服务端口
-admin_port = 8889
+port = 8889
 
+[server]
 # 运行模式: debug, release
 mode = "release"
 
@@ -121,6 +135,40 @@ allow_headers = ["Origin", "Content-Type", "Authorization"]
 allow_credentials = true
 ```
 
+### Redis 配置
+
+```toml
+[redis]
+# Redis 服务器地址
+host = "localhost"
+
+# Redis 端口
+port = 6379
+
+# Redis 密码（留空表示无密码）
+password = ""
+
+# Redis 数据库编号
+db = 0
+
+# 连接池大小
+pool_size = 10
+```
+
+### 速率限制配置
+
+```toml
+[rateLimit]
+# 是否启用速率限制
+enable = true
+
+# 每个 API 密钥每分钟请求数限制
+requests_per_minute = 60
+
+# 每个 IP 每分钟请求数限制
+ip_requests_per_minute = 120
+```
+
 ## 环境变量说明
 
 环境变量前缀为 `MG_`，在 `.env` 文件中配置：
@@ -133,6 +181,34 @@ MG_DATABASE_DSN=user:password@tcp(localhost:3306)/modelgate?charset=utf8mb4&pars
 
 # 数据库类型
 MG_DATABASE_TYPE=mysql
+
+# 数据库主机
+MG_DATABASE_HOST=localhost
+
+# 数据库端口
+MG_DATABASE_PORT=3306
+
+# 数据库用户名
+MG_DATABASE_USER=your_db_user
+
+# 数据库密码
+MG_DATABASE_PASSWORD=your_db_password
+
+# 数据库名称
+MG_DATABASE_NAME=modelgate
+```
+
+### Redis
+
+```env
+# Redis 主机
+MG_REDIS_HOST=localhost:6379
+
+# Redis 密码（如果有）
+MG_REDIS_PASSWORD=your_redis_password
+
+# Redis 数据库编号
+MG_REDIS_DB=0
 ```
 
 ### JWT
